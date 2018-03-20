@@ -1,6 +1,6 @@
 {
   "name": "csv2readme",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "read csv file with fixed format and parse a readme markdown file",
   "main": "src/csv2readme.js",
   "scripts": {
