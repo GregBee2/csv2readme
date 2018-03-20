@@ -4,15 +4,15 @@ const definition = require("../package.json");
 var options={
 	input:{
 		base:"data/base.csv",
-		functionParam:"data/functionParams.csv",
-		classDef:"data/classes.csv"
+		functionParam:"data/functionParameters.csv",
+		classDef:"data/classDefinition.csv"
 	},
-	moduleName:"xassist-object",
-	globalTOC:false,
+	moduleName:"xassist",
+	globalTOC:true,
+	baseURL:"https://github.com/GregBee2/",
 	header:{
-		title:"@xassist/xassist-object",
-		explanation:["This module adds different methods to the generic javascript `Object`.",
-			"It does not extend the javascript `Object` itself, but defines a subClass."].join("\r\n")
+		title:"xassist",
+		explanation:["Several helper functions for Array's, objects, events, Dates, ..."].join("\r\n")
 	},
 	headerFiles:["src/installationModule.md"],
 	includeDependencies:true,
@@ -20,15 +20,15 @@ var options={
 	footerFiles:[/*"dependencies.md","src/license.md"*/],
 	subTitle:"API",
 	output:{
-		file:"src/object.md"
+		file:"src/TOC.md"
 	},
 	baseLevel:3,
 	headerTemplates:{
-		moduleName:"xassist-object",
-		moduleUrl:"https://raw.githubusercontent.com/GregBee2/xassist-object/master/dist/xAssist-object.min.js",
+		moduleName:"xassist",
+		moduleUrl:"https://raw.githubusercontent.com/GregBee2/xassist/master/dist/xAssist.min.js",
 		libraryName:"xassist",
 		libraryUrl:"https://github.com/GregBee2/xassist",
-		moduleTest:"object()"
+		moduleTest:"version()"
 	},
 	footerTemplates:{
 		/*license:definition.license,

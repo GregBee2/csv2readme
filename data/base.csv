@@ -7,3 +7,234 @@ var bObj=object(b);";"bObj.onChange(""yes"",fn)
 b.yes=true //nothing get's changed so the listener is not fired
 b.yes=""finally"" //onChange is fired";"res===[""finally"",true,""yes"",b]"
 xassist-object;object().clone();method;clone() is a very basic cloner of objects it uses JSON.parse(JSON.stringify(baseObject)) for cloning. Even with the different limitations JSON parse/stringify entails, the cloner works fairly well and reasonable fast.;object(baseObject).clone();;clone() returns a clone of the current baseObject.;;;;
+xassist-object;object().assign();method;The method `object().assign()` works the same as the function [`Object.assign()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) in fact it even uses it if this function is available.;object(obj).assign(/*list of source objects*/);This method copiesall own property-values of all objects inside the `arguments-list` to the baseObject.;;;;object(obj).assign(c,null,{e:4})===Object.assign(obj,c,null,{e:4});
+xassist-object;object().mergeUnique();method;`object().mergeUnique()` does the same as assign it copies all own property values to a target object (ie this.object, the baseObject of `object()`), with this restriction. it only copies the values for properties allready existant in the base (target object).;object(obj).mergeUnique(sourceObj);MergeUnique takes into account the type of the propertyvalue. if the baseobject has `Strings`,`Boolean` or `Numbers` as propertyvalue, the corresponding value in the sourceobject (passed on as argument to `mergeUnique`) will be transformed to this type.;the method returns the base object (ie `this.object`). the object that is changed.;;"var testObject={
+  number1:1,
+  number2:2,
+  number3:3,
+  number4:4,
+  number5:5,
+  number6:6,
+  txt1:""1"",
+  txt2:""2"",
+  txt3:""3"",
+  txt4:""4"",
+  bool1:true,
+  bool2:true,
+  bool3:true,
+  bool4:false,
+  bool5:true,
+  array1:[1,2],
+  array2:[true]
+ },
+  sourceObj={
+   number1:1.57,
+   number2:""3"",
+   number3:""r"",
+   number4:false,
+   number5:true,
+   number7:-157,
+   txt1:""ok"",
+   txt2:4,
+   txt3:true,
+   bool1:false,
+   bool2:0,
+   bool3:"""",
+   bool4:""false"",
+   array1:[1,3]
+  }
+";"object(testObject).mergeUnique(sourceObj);";"console.log(testObject)
+/*{
+   number1:1.57,
+   number2:3,
+   number3:NaN,
+   number4:0,
+   number5:1,
+   number6:6,
+   txt1:""ok"",
+   txt2:""4"",
+   txt3:""true"",
+   txt4:""4"",
+   bool1:false,
+   bool2:false,
+   bool3:false,
+   bool4:true,
+   bool5:true,
+   array1:[1,3],
+   array2:[true]
+  };*/
+"
+xassist-object;object().toArray();method;`toArray` returns an array of all values for the own properties of the object.;object(obj).toArray();;`toArray()` returns an array with all values for each own property of the baseobject.;;"var testObject={key1:157,key2:""txt"",key3:false}";"var result=object(testObject).toArray();";"console.log(result)
+// [157,""txt"",false]"
+xassist-object;object().toMapArray();method;`toMapArray` returns an array with `[key,value]` arrays as its elements.;object(obj).toMapArray();;the result of `toMapArray()` is an Array with all key,value pairs.;;"var testObject={key1:157,key2:""txt"",key3:false}";"var result=object(testObject).toMapArray();";"console.log(result)
+// [[key1,157],[key2,""txt""],[key3,false]]"
+xassist-object;object().forEach();method;`forEach` is similar to the native `Array.prototype.forEach`, it executes a function for each own property of the function.;object(obj).forEach(fn::function [,thisArg]);;forEach returns nothing, it executes a function for each property. If you think it should return anything, look at `map()`;;"var count=0,
+ testObject={key1:true,key2:false:key3:true,key4:false},
+ fn=function(value,keyName,obj){count+= (value&&keyName!=""key3"")}";"object(testObject).forEach(fn);";count===1
+xassist-object;object().map();method;`map()` is comparable to the native map on arrays, it returns a new object constructed from the mapped key, value pairs of the baseObject.;object(obj).forEach(fn::function [,thisArg]);;"`map()` returns a new object, it executes a function for each property and those return values are the values for the corresponding properties.
+";;"var testObject={key1:157,key2:""text"":key3:true,key4:false},
+ fn=function(value,keyName,obj){return  (typeof value!=='number' && keyName!=""key3"")}";"var result=object(testObject).map(fn);";"console.log(result)
+/*{
+ key1:false,
+ key2:true,
+ key3:false,
+ key4:true
+}*/"
+xassist-csv;csv();function;The base function csv(), gives access to the underlying methods;csv(/*[delimiter::string],[options::Object]*/);;"`csv()` returns 4 methods:
+- `toArray` [function]: which will return an array as the result of the csv-parsing 
+- `toObject` [function]: which will return an object as the result of the csv-parsing 
+- `fromArray` [function]: the inverse of toArray(), this will give a valid csv-string starting from an array 
+- `fromObject` [function]: the inverse of toObject, it will return a valid csv-string starting from an object";;;"csv()
+csv("",|"")
+csv("","",{headersIncluded:true})
+csv({headersIncluded:true})";
+xassist-csv;csv().toArray();method;The first method csv().toArray() will parse the csv string and formats it as an array.;csv().toArray(csvTextString::string [,callBack::function [,headers::array]]);;"`csv().toArray()` returns an `Object`:
+ - **result**: an array of arrays
+ - **emptyRecordLines**:  an array with the index of all rows that were considered empty. Caution the rows may have been deleted, dependent on the csv-options set.
+ - **error**: an object representing the error (if any) was encountered. Be aware the parser should not throw an error when something went wrong. Instead it will fail gently and returns the data parsed uptill then.
+ - **validCSV**: a Boolean indicating if an error occured during parsing.
+ - **startIndex**: the character index were the first data was retrieved. Since in this example headers are parsed seperatly, the index was not 0, but 25 (the index of the first real row)
+ - **endIndex**: the last index parsed, usually the length of the csv-string
+ - **header**: the headers parsed by the parser, or defined as parameter for `csv().toArray()`
+```js
+{
+  result:[[/*row1Values*/],?,[/*rowNValues*/]],
+  emptyRecordLines:[],
+  error: {},
+  validCSV: true,
+  startIndex:25,
+  endIndex: 157,
+  header: [ 'header1', 'header2', 'header3' ]
+}
+```";;"var testData=[
+ [""header1"",""header2"",""header3""],
+ [""val1_row1"",""val2_row1"",""val3_row1""],
+ [""val1_row2"",""val2_row2"",""val3_row2""],
+ [""val1_row3"",""val2_row3"",""val3_row3""],
+ [""val1_row4"",""val2_row4"",""val3_row4""]
+]
+var csvTextString=testData.map(v=>v.join("","")).join(""\r\n"")";"csv("","",{headersIncluded:true}).toArray(csvTextString);";"{ result:
+   [ [ 'val1_row1', 'val2_row1', 'val3_row1' ],
+     [ 'val1_row2', 'val2_row2', 'val3_row2' ],
+     [ 'val1_row3', 'val2_row3', 'val3_row3' ],
+     [ 'val1_row4', 'val2_row4', 'val3_row4' ] ],
+  emptyRecordLines: [],
+  error: {},
+  validCSV: true,
+  startIndex: 25,
+  endIndex: 147,
+  header: [ 'header1', 'header2', 'header3' ] }"
+xassist-csv;csv().toObject();method;The other csv-parsing method `csv().toObject()` will parse the csv string and formats it as an object.;csv().toObject(csvTextString::string [,callBack::function [,headers::array]]);"`csv().toObject()` is similar to the method `csv().toArray()`.
+The only difference from `csv().toArray()` is the result, here an array of objects is returned with the key's being the headers identified.
+";"`csv().toObject()` returns an `Object`:
+ - **result**: an array of objects
+ - **emptyRecordLines**:  an array with the index of all rows that were considered empty. Caution the rows may have been deleted, dependent on the csv-options set.
+ - **error**: an object representing the error (if any) was encountered. Be aware the parser should not throw an error when something went wrong. Instead it will fail gently and returns the data parsed uptill then.
+ - **validCSV**: a Boolean indicating if an error occured during parsing.
+ - **startIndex**: the character index were the first data was retrieved. Since in this example headers are parsed seperatly, the index was not 0, but 25 (the index of the first real row)
+ - **endIndex**: the last index parsed, usually the length of the csv-string
+ - **header**: the headers parsed by the parser, or defined as parameter for `csv().toArray()`
+```js
+{
+  result:[{/*row1Object*/},?,{/*rowNObject*/}],
+  emptyRecordLines:[],
+  error: {},
+  validCSV: true,
+  startIndex:25,
+  endIndex: 157,
+  header: [ 'header1', 'header2', 'header3' ]
+}
+```";;"var testData=[
+ [""header1"",""header2"",""header3""],
+ [""val1_row1"",""val2_row1"",""val3_row1""],
+ [""val1_row2"",""val2_row2"",""val3_row2""],
+ [""val1_row3"",""val2_row3"",""val3_row3""],
+ [""val1_row4"",""val2_row4"",""val3_row4""]
+]
+var csvTextString=testData.map(v=>v.join("","")).join(""\r\n"")";"csv("","",{headersIncluded:true}).toObject(csvTextString);";"{ result:
+   [{""header1"":""val1_row1"",""header2"":""val2_row1"",""header3"":""val3_row1""},{""header1"":""val1_row2"",""header2"":""val2_row2"",""header3"":""val3_row2""},{""header1"":""val1_row3"",""header2"":""val2_row3"",""header3"":""val3_row3""},{""header1"":""val1_row4"",""header2"":""val2_row4"",""header3"":""val3_row4""}]
+  emptyRecordLines: [],
+  error: {},
+  validCSV: true,
+  startIndex: 25,
+  endIndex: 147,
+  header: [ 'header1', 'header2', 'header3' ] }"
+xassist-csv;csv().fromArray();method;the counterpart of `csv().toArray()` is `csv().fromArray()`;csv().fromArray(rows::Array(Array) [,headers::array]]);This method will build a vild csv-textString based on the rows in Array-format;`csv().fromObject()` returns a String, which can be saved as valid csv-tekst.;;"var rows=[ [ 'val1_row1', 'val2_row1', 'val3_row1' ],
+  [ 'val1_row2', 'val2_row2', 'val3_row2' ],
+  [ 'val1_row3', 'val2_row3', 'val3_row3' ],
+  [ 'val1_row4', 'val2_row4', 'val3_row4' ] ];
+var header: [ 'header1', 'header2', 'header3' ];";"csv("","").fromArray(rows,header)";"/*
+""header1,header2,header3
+val1_row1,val2_row1,val3_row1
+val1_row2,val2_row2,val3_row2
+val1_row3,val2_row3,val3_row3
+val1_row4,val2_row4,val3_row4""
+*/"
+xassist-csv;csv().fromObject();method;the counterpart of `csv().toObject()` is `csv().fromObject()`;csv().fromObject(rows::Array(Object) [,headers::array]]);This method will build a vild csv-textString based on the rows in Object-format;`csv().fromObject()` returns a String, which can be saved as valid csv-tekst.;;"var rows=[ {h1: 'val1_row1', h2:'val2_row1', h3:'val3_row1' },
+  {h1: 'val1_row2', h2:'val2_row2', h3:'val3_row2' },
+  {h1: 'val1_row3', h2:'val2_row3', h3:'val3_row3' },
+  {h1: 'val1_row4', h2:'val2_row4', h3:'val3_row4' } ];
+var header: [' h1' ,'h2' ,'h3' ];";"csv("","").fromObject(rows,header)";"/*
+""h1,h2,h3
+val1_row1,val2_row1,val3_row1
+val1_row2,val2_row2,val3_row2
+val1_row3,val2_row3,val3_row3
+val1_row4,val2_row4,val3_row4""
+*/"
+xassist-array;array();constructor;The base function array(), gives access to the underlying methods;array(/*array:Array*/);;"`array()` returns 3 methods:
+- `pushUnique` [function]: Pushes elements on the array, only if the element is unique
+- `groupSequence` [function]: this function groups elements based on previouselement (so it is best to have an ordered array as input)
+- `replaceNull` [function]: this function replaces all null or undefined values";;;"array([1,2,3])
+array([""hello"",""world"", ""!""])";
+xassist-array;array().pushUnique();method;The first method `array().pushUnique()` will push elements onto the array, but only if their unique;"array(arr).pushUnique(value [,unique::Boolean; default:true])";;`array().pushUnique()` returns the length of the original array.;;"var b={yes:true};
+var a=[1,2,b,{a:1},""test""]
+var a2=array(a)";"a2.pushUnique(1)           //a.length===5 (the element 1 exists, nothing added)
+a2.pushUnique(1,false)     //a.lenght===6 (override of the unique check, so 1 is added)
+a2.pushUnique({a:1})       //a.length===7 (objects should be passed by reference)
+a2.pushUnique(b)           //a.length===8 (object is passed by reference, so it get's added)";"a===[1,2,b,{a:1},""test"",1,{a:1},b]"
+xassist-array;array().groupSequence();method;`array().groupSequence()` will group the array based on a groupingfunction, which compares each value with it's predecessor.;array(arr).groupSequence(checkFn::function);`array().groupSequence()` works best on a sorted array.;`array().groupSequence()` returns a new array (ie the original array, has not changed) with subarray for each group.;;"var fn=function(a,b){return b-a===1}
+var fn2=function(a,b){return typeof a===typeof b}
+var testArray=[1,2,3,5,6,8,9]
+var testArray2=[undefined,undefined,2,2,""a"",""b"",{t:1},{a:2}]";"var result=array(testArray).groupSequence(fn)
+var result2=array(testArray2).groupSequence(fn2)";"result===[[1,2,3],[5,6],[8,9]]
+result2===[[undefined,undefined],[2,2],[""a"",""b""],[{t:1},{a:2}]]"
+xassist-array;array().replaceNull();method;The method `array().replaceNull()` replaces all null or undefined values with a value described by replacer;array(arr).replaceNull(replacer);"**Remark**: empty values (ie [/*empty*/,""not empty""]) are considered undefined. But there's a slight difference with explicitly defining undefined as the value.
+
+try following code:
+```js
+[1,,2].map(v=>""ok"")===[""ok"",,""ok""]
+[1,undefined,2].map(v=>""ok"")===[""ok"",""ok"",""ok""]
+```
+The reason for this is the implementation of map; it makes an object of the array `Object([1,,2]) and checks if the key (ie the index) exists in this object. For empty values this returns false.
+If someone has more information about this, feel free to contact me.";`array().replaceNull()` returns a new array (ie the original array, has not changed) with the correct result.;;"var testArray=array([""ok"",""null"",null,undefined,""test"",false,3,,""end""]);
+var replacerV=""replaced"";
+var replacerA=[""replaced0"",""replaced1"",""replaced2"",""replaced3"",""replaced4"",""replaced5""];
+var replacerF=function(value,i){
+ if (value===null){
+  return ""replacednull_""+i;
+ }
+ else if (typeof value===""undefined""){
+  return ""replacedundef_""+i;
+ }
+ else{
+  return ""????""
+ }
+};";"var resultV=array(testArray).replaceNull(replacerV)
+var resultA=array(testArray).replaceNull(replacerA)
+var resultF=array(testArray).replaceNull(replacerF)";"resultV===[""ok"",""null"",""replaced"",""replaced"",""test"",false,3,""replaced"",""end""]
+resultA===[""ok"",""null"",""replaced2"",""replaced3"",""test"",false,3,undefined,""end""]
+resultF===[""ok"",""null"",""replacednull_2"",""replacedundef_3"",""test"",false,3,""replacedundef_7"",""end""]"
+xassist-eventdispatcher;EventDispatcher();constructor;The base function is the `constructor`-function for the class EventDispatcher. ;"EventDispatcher()
+new EventDispatcher()";`new` is not needed since the constructor checks for the use of the keyword.;;EventDispatcher;;;
+xassist-eventdispatcher;EventDispatcher().registerEvent();method;`EventDispatcher().registerEvent()` registers events so it can be triggered in the future;EventDispatcher().registerEvent(eventName [,defaultThis]);;registerEvent returns an error if the event was registered before.;;;;
+xassist-eventdispatcher;EventDispatcher().hasEvent();method;The method `EventDispatcher().hasEvent()` checks if an event was registered before.;EventDispatcher().hasEvent(eventName);;It returns a boolean indicating if the event was registered.;;;;
+xassist-eventdispatcher;EventDispatcher().on();method;The method `EventDispatcher().on()` adds a listener for a certain event.;EventDispatcher().on(eventName,callBack [, thisArg]);;;;;;
+xassist-eventdispatcher;EventDispatcher().once();method;The method `EventDispatcher().once()` adds a listener for a certain event.;EventDispatcher().once(eventName,callBack [, thisArg]);"`once()` is exactly the same the same as `on()`, but the listener will only gets executed once, even when the event is trigerred multiple times.
+";;;;;
+xassist-eventdispatcher;EventDispatcher().off();method;The method `EventDispatcher().off()` removes a listener for a certain event.;EventDispatcher().off(eventName,callBack );;;;;;
+xassist-eventdispatcher;EventDispatcher().fire();method;The method `EventDispatcher().fire()` fires an event.;EventDispatcher().fire(eventName /*list of other arguments*/ );;;;;;
+xassist-main;id();function;The function id() returns a unique identifier;"xa.id() \\returns an unique identifier
+xa.id(""prefix"") \\returns ""prefix_""+unique identifier";;The value it returns is a `String`-formatted `Number`;;;;
+xassist-main;ready();function;The function adds a callback to the DOMContentLoaded-event, it get's executed when this event is triggered. or immediatly, when the DOM was allready ready.;ready(callBack::function [,thisArg]);;;;;"xa.ready(cb)    \\executes cb(eventDetails) (this inside cb references the document)
+xa.ready(cb,thisArg)  \\executes cb(eventDetails) (this inside cb references thisArg) ";
+xassist-main;template();function;A basic templating engine, which replaces substrings in a `String` based on a given object and his keys.;xa.template(txt,obj,strNotFound);;the string with all its replaced substrings;;;"xa.template('start${a}${b.c.d}${b.c.d.e}',{a:""OK"",b:{c:{d:""VERYDEEP""}}},""notfound"") \\returns 'startOKVERYDEEPnotfound'";

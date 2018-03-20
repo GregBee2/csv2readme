@@ -1,0 +1,62 @@
+function;parameterName;parameterType;optional;defaultValue;explanation
+object();baseObject;Object;FALSE;;an Object on which we will execute the underlying methods
+object().onChange();keyName;String;FALSE;;is an existing key for which the listener should gets executed, if the key does not exists, an Error is thrown
+object().onChange();callBack;Function;FALSE;;a listenerfunction which takes 4 parameter (newValue,oldValue,keyName,object)
+object().onChange();thisArg;;TRUE;XaObject.object;the execution-context of the listener
+object().assign();obj_1,obj_2,?,obj_n;one or more source objects;FALSE;;All enumerable properties of these source-objects will be copied to the baseObject
+object().mergeUnique();sourceObject;Object;FALSE;;another object from which the values of the properies existent in the targetObject will be copied.
+object().forEach();fn;Function;FALSE;;he function that should be executed on each property of the object. this function accepts 3 parameters (value of the current property, the name of the property and the object itself)
+object().forEach();thisArg;;TRUE;XaObject.object;the execution-context of the function
+object().map();fn;Function;FALSE;;he function that should be executed on each property of the object. this function accepts 3 parameters (value of the current property, the name of the property and the object itself)
+object().map();thisArg;;TRUE;XaObject.object;the execution-context of the function
+csv();delimiter;String;TRUE;""";""";a String where each character represents a delimiter used in the CSV-text (ie multiple delimiters can be used at the same time).
+csv();options;Object;TRUE;;"an Object where multiple settings regarding to the parsing can be changed
+
+The different settings for the option-Object are:
+- **headersIncluded** [boolean; default=FALSE]: this parameter takes care of the parsing of the headers included in the CSV-file. It strips the first row from he CSV-text and treats this as a header-row.
+- **headerPrefix** [String; default=""column_""]: if the headers are unknown (not provided in the submethods or not parsed via the headersIncluded-option or an empty value in the CSV-text) will be prefixed with this option. A following number will indicate the columnIndex.
+- **spaceAllowedBetweenDelimiterAndQuote** [boolean; default:TRUE]: this option (dis)allows possible spaces between double-quotes (for escaped values) and the delimiter, ie `""val1\""\""""   ; ""val2""\r\n` will be a correct row.
+- **treatConsecutiveDelmitersAsOne** [boolean; default:TRUE]: this option treats consecutive delimiters as a typo (eg `""val1;;val2""` will be parsed as `[""val1"",""val2""]`). This option can be used with the following option (trimValues), where even spaces between consecutive delimiters are considered as empty.
+- **trimValues** [boolean; deault:TRUE]: this option trims leading and trailing spaces and/or tabs for any values (except if space and or tab are delimiters)
+- **emptyValuesAreNull** [boolean; default:TRUE]: this option treats empty values (ie `""""`) as the javascript null-object. In combination with trimValues even spaces become null.
+- **removeLeadingEmptyRows** [boolean; default:true]: removes leading empty rows from the result.
+- **removeTrailingEmptyRows** [boolean; default:true]: removes trailing empty rows from the resultset
+- **removeInnerEmptyRows** [boolean; default:false]: removes emty rows found in the middle from the resultset
+We should remark that for the last three options, an empty row can be filled with spaces and/or tabs if the option `trimValues` equals TRUE (the default value)."
+csv().toArray();csvTextString ;String;FALSE;;a String reresenting the csv-data with the delimiters as set with `csv()`-initialization.
+csv().toArray();callBack;Function;TRUE;undefined; a function which  will process each row and should return the corrected row (or `null` to remove the row from the result)  which will take as input the parameters row and rowIndex
+csv().toArray();headers;Array;TRUE;undefined; this array overwrites the headers found in the csv-data (if the option `headersIncluded:true` is set) or predefines the headers (eg when the data does not include the headers)
+csv().toObject();csvTextString ;String;FALSE;;a String reresenting the csv-data with the delimiters as set with `csv()`-initialization.
+csv().toObject();callBack;Function;TRUE;undefined; a function which  will process each row and should return the corrected row (or `null` to remove the row from the result)  which will take as input the parameters row and rowIndex
+csv().toObject();headers;Array;TRUE;undefined; this array overwrites the headers found in the csv-data (if the option `headersIncluded:true` is set) or predefines the headers (eg when the data does not include the headers)
+csv().fromArray();rows;Array;FALSE;;an array of arrays, representing the values inside each row.
+csv().fromArray();headers;Array;TRUE;[];An array with all headers of each column
+csv().fromObject();rows;Array;FALSE;;an array of Objects, representing the values inside each row.
+csv().fromObject();headers;Array;TRUE;[];An array with all headers of each column
+array();baseArray;Array;FALSE;;an Array on which we will execute the underlying methods.
+array().pushUnique();value;;;;is an element that you want to push on the array
+array().pushUnique();unique;Boolean;TRUE;true;a boolean indicating if the function must check if the value allready exists
+array().groupSequence();checkFn;Function;FALSE;;a function which compares each value of the array with it's predecesor, if it returns true, the element is added to the current group. Otherwise a new group is made
+array().replaceNull();replacer;Function or Array or ???;FALSE;;"replacer may come in three forms, and defines the value that any undefined, empty or `null`-value will be changed to.
+  - **replacer** [Function]: is a function with parameters (`currentValue` and `currentIndex`) if a null, undefined or empty (!!! an empty value is taken into account aswell) the function get's executed and based on the curentValue and it's index the return-value will be put in the array.
+  - **replacer** [Array]: if a null, undefined or empty is encountered the currentValue get's changed by the value of the replacerArray at the given index.
+  - **replacer** [anything else]: all the null's, undefined or empty values are replaced by the replacer-value itself"
+EventDispatcher().registerEvent();eventName;String;FALSE;;a string with the name for the event itself
+EventDispatcher().registerEvent();defaultThis;;TRUE;this;the default execution-context for the listeners
+EventDispatcher().hasEvent();eventName;String;FALSE;;a string with the name for the event itself
+EventDispatcher().on();eventName;String;FALSE;;a string with the name for the event itself.
+EventDispatcher().on();callBack;Function;FALSE;;the function which needs to be executed when the event is trigered
+EventDispatcher().on();thisArg;;TRUE;defaultThis;an optional reference for thisArg, the callBack will be binded on trigger of the event (not before, so you could change the callBack if needed)
+EventDispatcher().once();eventName;String;FALSE;;a string with the name for the event itself.
+EventDispatcher().once();callBack;Function;FALSE;;the function which needs to be executed when the event is trigered
+EventDispatcher().once();thisArg;;TRUE;defaultThis;an optional reference for thisArg, the callBack will be binded on trigger of the event (not before, so you could change the callBack if needed)
+EventDispatcher().off();eventName;String;FALSE;;a string with the name for the event itself.
+EventDispatcher().off();callBack;Function;FALSE;;the listener which needs to be removed
+EventDispatcher().fire();eventName;String;FALSE;;a string with the name for the event itself.
+EventDispatcher().fire();`/*list of arguments*/`;;TRUE;;all other arguments that will be passed to the listeners as arguments
+id();prefix;String;TRUE;"""""";This parameter will be used as a prefix for the id.
+ready();callBack;Function;FALSE;;The listener to be attached to the DOMContentLoaded-event
+ready();thisArg;;TRUE;document;the execution-context of the function
+template();txt;String;FALSE;;the base tekst where the templating-engine needs to change certain substrings (it replaces all `${objKey}`)
+template();obj;Object;FALSE;;the lookup-object to find the defined key's in txt
+template();strNotFound;String;TRUE;"""""";when the respective key is not found in the lookupObject, the template get's replaced by this string

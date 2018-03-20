@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/GregBee2/csv2readme#readme",
   "dependencies": {
+    "@xassist/xassist-array": "^1.0.1",
     "@xassist/xassist-csv": "^1.0.7"
   }
 }

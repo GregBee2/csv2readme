@@ -3,6 +3,7 @@ var fs = require('fs');
 var path= require('path')
 var pckPath=path.join(process.cwd(),"package.json");
 var definition=require(pckPath);
+var { array }=require('@xassist/xassist-array')
 
 
 fs.readFileAsync = function(filename) {
@@ -90,7 +91,7 @@ module.exports.init=function(options){
 			MD=createMD(results,options.moduleName,options.baseLevel);
 		}
 		else{
-			//create globalTOC
+			MD=createTOC(results,options.baseURL,options.baseLevel);
 		}
 		if(options.header){
 			prefix=[];
@@ -162,6 +163,21 @@ function getHeaderPrefix(level){
 		res+="#"
 	}
 	return res+" ";
+}
+function createTOC(contentObj,baseURL,baseLevel){
+	var getAnchorLink=function(txt){
+		txt.trim().toLowerCase().replace(/[^\w\- ]+/g, ' ').replace(/\s+/g, '-').replace(/\-+$/, '');
+	}
+	var result=[];
+	var linksArray=contentObj.base.map(function(v){
+		return [v.parent,v.element,baseURL+v.parent,getAnchorLink(v.element)]
+	})
+	linksArray=array(linksArray).groupSequence(function(a,b){return a[0]===b[0]})
+	linksArray.forEach(function(v){
+		result.push("- [**"+v[0][0]+"**]("+v[0][2]+")");
+		result=result.concat(v.map(x=>"  - ["+x[1]+"]("+x[2]+"#"+3[3]+")"));
+	})
+	return result
 }
 function createMD(contentObj,parent,baseLevel){
 	var result=[];
@@ -250,7 +266,7 @@ function retrieveResultSection(resultText,resultType,element,tree,level){
 		else {
 			result.push("`"+element+"` returns a new class instance of the Class `"+resultType+"`");
 			result.push("```js")
-			result.push(element.replace("()","(a)")+".constructor.name==="+resultType);
+			result.push(element.replace("()","(a)")+".constructor.name===\""+resultType+"\"");
 			result.push("```")
 			
 		}

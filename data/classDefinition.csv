@@ -9,3 +9,10 @@ XaObject;forEach();method; similar to forEach for Arrays, but iterates over the 
 XaObject;map();method; similar to map for Arrays, but iterates over the keys of an object
 XaObject;object;Object;the current baseObject, provided via the simple factory-function object()
 XaObject;currentValues;Object;an intermediate object with the current values of the base object, used for events
+EventDispatcher;_event;Object;here all registered events and listeners are stored
+EventDispatcher;registerEvent();method;the method to register the events, so listeners can get attached
+EventDispatcher;hasEvent();method;a method to check if an event is registered
+EventDispatcher;on();method;add a listener to an event
+EventDispatcher;once();method;add a listener to an event, which will be removed when the event is fired the first time
+EventDispatcher;fire();method;fires an event
+EventDispatcher;off();method;removes a specific listener from an event
