@@ -1,0 +1,9 @@
+parent;element;type;explanation;code;remark;result;resultType;exampleInit;exampleCode;exampleResult
+xassist-object;object();constructor;The base function object() creates a new Class instance which gives access to some helper Object-functions;object(/*baseObject::object*/);note that the new- keyword should not be used to create the class-instance.;;XaObject;;"object({a:157})
+object({hello:""world"", ok:true})";
+xassist-object;object().onChange();method;sets a listener that will be executed if a value for a given key gets changed;object(baseObject).onChange(keyName, callBack::function [thisArg]);;;;"var b={yes:true}, res=false;
+fn=function(value,oldValue,key,Object){ res=(Array.prototype.slice.call(arguments))};
+var bObj=object(b);";"bObj.onChange(""yes"",fn)      
+b.yes=true //nothing get's changed so the listener is not fired
+b.yes=""finally"" //onChange is fired";"res===[""finally"",true,""yes"",b]"
+xassist-object;object().clone();method;clone() is a very basic cloner of objects it uses JSON.parse(JSON.stringify(baseObject)) for cloning. Even with the different limitations JSON parse/stringify entails, the cloner works fairly well and reasonable fast.;object(baseObject).clone();;clone() returns a clone of the current baseObject.;;;;

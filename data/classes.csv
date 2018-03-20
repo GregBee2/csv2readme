@@ -1,0 +1,11 @@
+class;property;propertyType;explanation
+XaObject;clone();method; very basic cloner for simple objects
+XaObject;onChange;method; adds a listener to the current object for changes in values
+XaObject;assign();method; a polyfill for Object.assign
+XaObject;mergeUnique();method; changes keys for this.object with given values, kinda similar to assign
+XaObject;toArray();method; returns all values for all keys in this.object
+XaObject;toMapArray();method; returns all key,value-pairs in this.object
+XaObject;forEach();method; similar to forEach for Arrays, but iterates over the keys of an object
+XaObject;map();method; similar to map for Arrays, but iterates over the keys of an object
+XaObject;object;Object;the current baseObject, provided via the simple factory-function object()
+XaObject;currentValues;Object;an intermediate object with the current values of the base object, used for events

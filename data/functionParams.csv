@@ -1,0 +1,12 @@
+function;parameterName;parameterType;optional;defaultValue;explanation
+object();baseObject;Object;FALSE;;an Object on which we will execute the underlying methods
+object().clone();;;;;
+object().onChange();keyName;String;FALSE;;is an existing key for which the listener should gets executed, if the key does not exists, an Error is thrown
+object().onChange();callBack;Function;FALSE;;a listenerfunction which takes 4 parameter (newValue,oldValue,keyName,object)
+object().onChange();thisArg;;TRUE;XaObject.object;the execution-context of the listener
+object().assign();;;;;
+object().mergeUnique();;;;;
+object().toArray();;;;;
+object().toMapArray();;;;;
+object().forEach();;;;;
+object().map();;;;;

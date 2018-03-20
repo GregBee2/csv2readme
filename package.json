@@ -1,0 +1,26 @@
+{
+  "name": "csv2readme",
+  "version": "1.0.0",
+  "description": "read csv file with fixed format and parse a readme markdown file",
+  "main": "src/csv2readme.js,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GregBee2/csv2readme.git"
+  },
+  "keywords": [
+    "csv",
+    "readme"
+  ],
+  "author": "gregory.beirens@gmail.com",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GregBee2/csv2readme/issues"
+  },
+  "homepage": "https://github.com/GregBee2/csv2readme#readme",
+  "dependencies": {
+    "@xassist/xassist-csv": "^1.0.7"
+  }
+}
