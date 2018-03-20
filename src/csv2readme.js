@@ -166,7 +166,7 @@ function getHeaderPrefix(level){
 }
 function createTOC(contentObj,baseURL,baseLevel){
 	var getAnchorLink=function(txt){
-		txt.trim().toLowerCase().replace(/[^\w\- ]+/g, ' ').replace(/\s+/g, '-').replace(/\-+$/, '');
+		return txt.trim().toLowerCase().replace(/[^\w\- ]+/g, '').replace(/\s/g, '-').replace(/\-+$/, '');
 	}
 	var result=[];
 	var linksArray=contentObj.base.map(function(v){
@@ -175,7 +175,7 @@ function createTOC(contentObj,baseURL,baseLevel){
 	linksArray=array(linksArray).groupSequence(function(a,b){return a[0]===b[0]})
 	linksArray.forEach(function(v){
 		result.push("- [**"+v[0][0]+"**]("+v[0][2]+")");
-		result=result.concat(v.map(x=>"  - ["+x[1]+"]("+x[2]+"#"+3[3]+")"));
+		result=result.concat(v.map(x=>"  - ["+x[1]+"]("+x[2]+"#"+x[3]+")"));
 	})
 	return result
 }
