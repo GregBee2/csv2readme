@@ -2,7 +2,7 @@
   "name": "csv2readme",
   "version": "1.0.0",
   "description": "read csv file with fixed format and parse a readme markdown file",
-  "main": "src/csv2readme.js,
+  "main": "src/csv2readme.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
